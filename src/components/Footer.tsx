@@ -6,7 +6,7 @@ import { AiOutlineSend } from 'react-icons/ai'
 
 export default function Footer() {
     return (
-    <footer className="bg-foreground text-background bottom-0 w-full h-64 px-48">
+    <footer className="bg-foreground text-background bottom-0 w-full h-64 px-48 mt-24">
         <div className="w-fit h-fit relative top-1/2 -translate-y-1/2">
             <table className="border-spacing-10">
                 <tbody>
