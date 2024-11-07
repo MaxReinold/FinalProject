@@ -1,0 +1,13 @@
+footer {
+    border-spacing: 1em 2em;
+    text-wrap: nowrap;
+}
+
+footer table th {
+    text-align: left;
+}
+
+footer table td, th {
+    padding-inline: 1em;
+    padding-block: 0.5em;
+}

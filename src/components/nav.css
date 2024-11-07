@@ -1,0 +1,11 @@
+nav li {
+    padding-block: 0.5em;
+}
+
+nav a:hover {
+    font-weight: bold
+}
+
+nav h2 {
+    padding-bottom: 0.5em;
+}
