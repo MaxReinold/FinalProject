@@ -1,14 +1,23 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Login() {
+    const { login } = useAuth();
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     })
+
+    const handleLogin = async () => {
+        const isLoggedIn = await login(formData.email, formData.password);
+        if (isLoggedIn) alert("Successfully Logged In");
+        else alert("Invalid Username or Password")
+    }
 
     return (
         <div className="w-full flex flex-row justify-end">
