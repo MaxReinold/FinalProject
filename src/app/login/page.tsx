@@ -3,10 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Login() {
     const { login } = useAuth();
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -15,8 +17,12 @@ export default function Login() {
 
     const handleLogin = async () => {
         const isLoggedIn = await login(formData.email, formData.password);
-        if (isLoggedIn) alert("Successfully Logged In");
-        else alert("Invalid Username or Password")
+        if (isLoggedIn) {
+            alert("Successfully Logged In");
+            router.push('/')
+        }   
+        else alert("Invalid Username or Password");
+
     }
 
     return (
