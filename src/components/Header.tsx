@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return <div className="border-b border-muted-foreground bg-background text-foreground fixed w-full top-0 h-24 flex justify-between items-end px-48 py-3">
     <h1 className="text-2xl font-bold"><Link href="/">Project Name</Link></h1>
@@ -18,7 +18,7 @@ export default function Header() {
         </span>
         <IoCartOutline size={32}/>
         {
-          user ? <div></div> : 
+          user ? <Button variant={'ghost'} onClick={() => logout()}>Logout</Button> : 
           <Button asChild variant={'ghost'}><Link href="/login">Login</Link></Button>
         }
     </div>  
