@@ -5,45 +5,48 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NewShoppingItem } from "@/lib/types";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function NewItem() {
+  const router = useRouter();
+  const params = useParams();
+
+  const id = params.id;
+
   const defaultItem = {
     _id: "",
     name: "",
     description: "",
     price: 0.0,
-    pictures: [],
+    pictures: null,
   };
-
-  const router = useRouter();
 
   const [item, setItem] = useState<NewShoppingItem>(defaultItem);
 
-  const handleSubmit = async (e: any) => {
+  useEffect(() => {
+    if (id) {
+      fetch(`/api/items/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setItem(data.item);
+        });
+    }
+  }, [id]);
+
+  const updateItem = async (e: any) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/items", {
-        method: "POST",
+      await fetch(`/api/items/${id}`, {
+        method: "PUT",
         body: JSON.stringify(item),
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to create item");
-      }
-
-      setItem(defaultItem);
       router.push("/");
-      alert("Item Added");
-      console.log(item);
     } catch (error) {
       console.error(error);
-      alert("Failed to create item");
     }
   };
 
@@ -52,7 +55,7 @@ export default function NewItem() {
       onSubmit={(e) => e.preventDefault()}
       className="max-w-md ml-28 flex flex-col gap-6"
     >
-      <h2 className="text-3xl font-semibold">Create Item</h2>
+      <h2 className="text-3xl font-semibold">Update Item</h2>
       <div>
         <Label htmlFor="name">Name</Label>
         <Input
@@ -126,8 +129,8 @@ export default function NewItem() {
             })}
         </div>
       </div>
-      <Button variant="outline" onClick={(e) => handleSubmit(e)}>
-        Create Item
+      <Button variant="outline" onClick={(e) => updateItem(e)}>
+        Update Item
       </Button>
     </form>
   );

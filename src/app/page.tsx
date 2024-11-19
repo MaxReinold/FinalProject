@@ -5,24 +5,27 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
+import { MdEdit } from "react-icons/md";
 import Image from "next/image";
 import { ShoppingItem } from "@/lib/types";
+import Link from "next/link";
 
 export default function Home() {
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
+  const getItems = async () => {
     try {
-      fetch("/api/items")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setItems(data);
-        });
+      const response = await fetch("/api/items");
+      const data = await response.json();
+      setItems(data);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    getItems();
+  }, [items]);
   return (
     <div className="px-52">
       <Nav />
@@ -104,6 +107,9 @@ function Item({
           ))}
         <span className="text-muted-foreground ml-1">({ratingCount})</span>
       </div>
+      <Link href={`/editItem/${id}`}>
+        <MdEdit className="text-gray-500 absolute top-56 right-2 cursor-pointer w-6 h-6" />
+      </Link>
       <IoMdCloseCircle
         className="text-red-500 absolute top-2 right-2 cursor-pointer w-6 h-6"
         onClick={() => deleteItem(id)}
