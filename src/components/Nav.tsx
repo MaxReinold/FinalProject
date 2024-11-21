@@ -17,26 +17,13 @@ export default function Nav() {
               <Link href="/newItem">Create Listing</Link>
             </li>
             <li>
-              <Link href="/account">My Account</Link>
-            </li>
-
-            <li>
-              <Link href="/cart">Cart</Link>
-            </li>
-            <li>
-              <Link href="/wishlist">Wishlist</Link>
-            </li>
-            <li>
-              <Link href="/shop">Shop</Link>
+              <Link href="/">Shop</Link>
             </li>
           </>
         ) : (
           <>
             <li>
               <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/newItem">Create Listing</Link>
             </li>
             <li>
               <Button onClick={async () => signIn()}>Log In</Button>

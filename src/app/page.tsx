@@ -34,10 +34,13 @@ export default function Home() {
       <div>
         <div className="text-primary flex flex-row items-center text-sm font-thin mb-4">
           <div className="h-8 w-4 bg-primary rounded-sm mr-2" />
-          Today's
+          <span>Featured</span>
         </div>
         <h2 className="text-2xl font-bold">For Sale</h2>
         <div className="flex flex-row gap-8 mt-4">
+          {items.length === 0 && (
+            <div className="w-full">No items to display</div>
+          )}
           <ItemCarousel items={items} />
         </div>
       </div>
@@ -85,13 +88,14 @@ function Item({
   };
 
   return (
-    <div className="flex flex-col gap-2 relative">
+    <div className="flex flex-col gap-2 relative hover:shadow-lg p-4 bg-white rounded-md group">
       {imgSrc ? (
         <Image
           src={imgSrc}
           alt={`Picture of ${name}`}
           width={200}
           height={200}
+          className="min-w-52 h-52"
         />
       ) : (
         <div className="w-52 h-52 bg-secondary mb-2" />
@@ -112,15 +116,15 @@ function Item({
         <span className="text-muted-foreground ml-1">({ratingCount})</span>
       </div>
       {user?.id && (
-        <>
+        <div className="hidden group-hover:block">
           <Link href={`/editItem/${id}`}>
-            <MdEdit className="text-gray-500 absolute top-56 right-2 cursor-pointer w-6 h-6" />
+            <MdEdit className="text-gray-500 absolute top-60 right-12 cursor-pointer w-6 h-6" />
           </Link>
           <IoMdCloseCircle
-            className="text-red-500 absolute top-2 right-2 cursor-pointer w-6 h-6"
+            className="text-red-500 absolute top-60 right-4 cursor-pointer w-6 h-6"
             onClick={() => deleteItem(id)}
           />
-        </>
+        </div>
       )}
     </div>
   );
@@ -150,7 +154,7 @@ function ItemCarousel({ items }: ItemCarouselProps) {
             originalPrice={100}
             ratingCount={150}
             ratingoo5={4.3}
-            imgSrc={item.pictures[0]}
+            imgSrc={item.picture}
           />
         ))}
       </div>

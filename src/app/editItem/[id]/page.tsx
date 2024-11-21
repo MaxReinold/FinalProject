@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { NewShoppingItem } from "@/lib/types";
+import { ShoppingItem } from "@/lib/types";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -19,10 +19,10 @@ export default function NewItem() {
     name: "",
     description: "",
     price: 0.0,
-    pictures: null,
+    picture: "",
   };
 
-  const [item, setItem] = useState<NewShoppingItem>(defaultItem);
+  const [item, setItem] = useState<ShoppingItem>(defaultItem);
 
   useEffect(() => {
     if (id) {
@@ -90,44 +90,16 @@ export default function NewItem() {
       <div>
         <Label htmlFor="image">Image</Label>
         <Input
-          type="file"
-          accept=".jpg, .png, .jpeg"
-          multiple
+          type="text"
           id="image"
-          value=""
+          value={item.picture}
           onChange={(e) => {
             setItem({
               ...item,
-              pictures: e.target.files && Array.from(e.target.files),
+              picture: e.target.value,
             });
           }}
         />
-        <div className="m-8">
-          {item.pictures &&
-            item.pictures.map((pic, index) => {
-              return (
-                <div key={index}>
-                  <Button
-                    variant="ghost"
-                    className="text-destructive hover:text-destructive-foreground hover:bg-destructive w-4 h-4 rounded-full"
-                    onClick={() => {
-                      setItem({
-                        ...item,
-                        pictures:
-                          item.pictures &&
-                          item.pictures.filter((picture) => {
-                            return picture.name != pic.name;
-                          }),
-                      });
-                    }}
-                  >
-                    ✖
-                  </Button>
-                  {pic.name}
-                </div>
-              );
-            })}
-        </div>
       </div>
       <Button variant="outline" onClick={(e) => updateItem(e)}>
         Update Item

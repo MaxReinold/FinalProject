@@ -20,6 +20,15 @@ export default function Register() {
       <form
         onSubmit={async (event) => {
           event.preventDefault();
+
+          {
+            /* make sure user has a student email */
+          }
+          if (!formData.email.endsWith("@uga.edu")) {
+            alert("Please use a student email");
+            return;
+          }
+
           if (formData.username && formData.email && formData.password) {
             try {
               const newUser = {

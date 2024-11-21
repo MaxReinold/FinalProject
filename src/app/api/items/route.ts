@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const { name, description, price, images } = await request.json();
+  const { name, description, price, picture } = await request.json();
   await connectMongoDB();
-  await Item.create({ name, description, price, images });
+  await Item.create({ name, description, price, picture });
   return NextResponse.json({ message: "Item created." }, { status: 201 });
 }
 
