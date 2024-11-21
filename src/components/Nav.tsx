@@ -1,9 +1,11 @@
 import Link from "next/link";
 import "./nav.css";
-import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "./ui/button";
+import { signIn, useSession } from "next-auth/react";
 
 export default function Nav() {
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   return (
     <nav>
@@ -37,7 +39,7 @@ export default function Nav() {
               <Link href="/newItem">Create Listing</Link>
             </li>
             <li>
-              <Link href="/login">Login / Register</Link>
+              <Button onClick={async () => signIn()}>Log In</Button>
             </li>
           </>
         )}

@@ -9,6 +9,7 @@ import { MdEdit } from "react-icons/md";
 import Image from "next/image";
 import { ShoppingItem } from "@/lib/types";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const [items, setItems] = useState([]);
@@ -25,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     getItems();
-  }, [items]);
+  }, []);
   return (
     <div className="px-52">
       <Nav />
@@ -63,6 +64,9 @@ function Item({
   ratingCount,
   imgSrc,
 }: ItemProps) {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const deleteItem = async (id: string) => {
     try {
       const response = await fetch(`/api/items/${id}`, {
@@ -107,13 +111,17 @@ function Item({
           ))}
         <span className="text-muted-foreground ml-1">({ratingCount})</span>
       </div>
-      <Link href={`/editItem/${id}`}>
-        <MdEdit className="text-gray-500 absolute top-56 right-2 cursor-pointer w-6 h-6" />
-      </Link>
-      <IoMdCloseCircle
-        className="text-red-500 absolute top-2 right-2 cursor-pointer w-6 h-6"
-        onClick={() => deleteItem(id)}
-      />
+      {user?.id && (
+        <>
+          <Link href={`/editItem/${id}`}>
+            <MdEdit className="text-gray-500 absolute top-56 right-2 cursor-pointer w-6 h-6" />
+          </Link>
+          <IoMdCloseCircle
+            className="text-red-500 absolute top-2 right-2 cursor-pointer w-6 h-6"
+            onClick={() => deleteItem(id)}
+          />
+        </>
+      )}
     </div>
   );
 }
