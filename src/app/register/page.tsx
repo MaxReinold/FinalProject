@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { hash } from "bcryptjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,9 +20,7 @@ export default function Register() {
         onSubmit={async (event) => {
           event.preventDefault();
 
-          {
-            /* make sure user has a student email */
-          }
+          /* make sure user has a student email */
           if (!formData.email.endsWith("@uga.edu")) {
             alert("Please use a student email");
             return;
