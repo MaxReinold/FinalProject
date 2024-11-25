@@ -5,7 +5,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const SIGNIN_ERROR_URL = "/login";
-export default async function LogIn() {
+export default async function LogIn({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const formAction = async (formData: FormData) => {
     "use server";
     try {
@@ -21,6 +25,8 @@ export default async function LogIn() {
       throw error;
     }
   };
+
+  const awaitedSearchParams = await searchParams;
 
   return (
     <div className="w-full flex flex-row justify-end">
@@ -43,6 +49,9 @@ export default async function LogIn() {
           name="password"
           id="password"
         />
+        {awaitedSearchParams["error"] === "CredentialsSignin" && (
+          <p className="text-red-600 font-bold">Invalid credentials.</p>
+        )}
         <Button className="w-full p-6 text-lg mb-8">Login</Button>
         <div className="text-muted-foreground">
           Don't have an account?{" "}
