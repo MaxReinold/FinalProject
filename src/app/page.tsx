@@ -1,7 +1,6 @@
 "use client";
 
 import Nav from "@/components/Nav";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
@@ -10,9 +9,15 @@ import Image from "next/image";
 import { ShoppingItem } from "@/lib/types";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { get } from "http";
+import { GetItems } from "@/lib/api";
+import { Input } from "@/components/ui/input";
+import { IoSearchOutline } from "react-icons/io5";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [items, setItems] = useState([]);
+  const [search, setSearch] = useState("");
 
   const getItems = async () => {
     try {
@@ -27,6 +32,11 @@ export default function Home() {
   useEffect(() => {
     getItems();
   }, []);
+
+  const filteredItems = items.filter((item: ShoppingItem) => {
+    return item.name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <div className="px-52">
       <Nav />
@@ -36,12 +46,23 @@ export default function Home() {
           <div className="h-8 w-4 bg-primary rounded-sm mr-2" />
           <span>Featured</span>
         </div>
+        <span className="relative">
+          <Input
+            placeholder="What are you looking for?"
+            className="bg-secondary border-none w-64 my-4"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <IoSearchOutline
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground"
+            size={24}
+          />
+        </span>
         <h2 className="text-2xl font-bold">For Sale</h2>
         <div className="flex flex-row gap-8 mt-4">
           {items.length === 0 && (
             <div className="w-full">No items to display</div>
           )}
-          <ItemCarousel items={items} />
+          <ItemCarousel items={filteredItems} getItems={getItems} />
         </div>
       </div>
     </div>
@@ -56,6 +77,7 @@ type ItemProps = {
   ratingoo5: number;
   ratingCount: number;
   imgSrc: string;
+  getItems: () => void;
 };
 
 function Item({
@@ -66,6 +88,7 @@ function Item({
   ratingoo5,
   ratingCount,
   imgSrc,
+  getItems,
 }: ItemProps) {
   const { data: session } = useSession();
   const user = session?.user;
@@ -81,6 +104,8 @@ function Item({
       }
 
       alert("Item Deleted");
+
+      getItems();
     } catch (error) {
       console.error(error);
       alert("Failed to delete item");
@@ -132,9 +157,10 @@ function Item({
 
 type ItemCarouselProps = {
   items: ShoppingItem[];
+  getItems: () => void;
 };
 
-function ItemCarousel({ items }: ItemCarouselProps) {
+function ItemCarousel({ items, getItems }: ItemCarouselProps) {
   const [marginLeft, setMarginLeft] = useState(0);
 
   const style = {
@@ -155,6 +181,7 @@ function ItemCarousel({ items }: ItemCarouselProps) {
             ratingCount={150}
             ratingoo5={4.3}
             imgSrc={item.picture}
+            getItems={getItems}
           />
         ))}
       </div>
