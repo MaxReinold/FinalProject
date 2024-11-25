@@ -18,5 +18,6 @@ export const config = {
     matcher: [
         "/editItem/:path*",
         "/newItem/",
+        "/account/"
     ]
 };
