@@ -13,11 +13,11 @@ export default function Header() {
 
   const sessionButton = user?.id ? (
     <Button variant={"ghost"} onClick={() => signOut()}>
-      <p>Logout</p>
+      <p className="cursor-pointer">Logout</p>
     </Button>
   ) : (
     <Button asChild variant={"ghost"} onClick={() => signIn()}>
-      <p>Login</p>
+      <p className="cursor-pointer">Login</p>
     </Button>
   );
 
